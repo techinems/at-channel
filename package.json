@@ -1,0 +1,24 @@
+{
+  "name": "atchannelbot",
+  "version": "1.0.0",
+  "description": "Allows the approval of @channel requests in a slack workspace",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpiambulance/atchannelbot.git"
+  },
+  "author": "RPI Ambulance",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rpiambulance/atchannelbot/issues"
+  },
+  "homepage": "https://github.com/rpiambulance/atchannelbot#readme",
+  "dependencies": {
+    "@slack/bolt": "^1.0.1",
+    "dotenv": "^8.0.0",
+    "eslint": "^5.16.0"
+  }
+}
