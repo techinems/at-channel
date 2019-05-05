@@ -43,22 +43,25 @@ const isModerator = async ({
   });
 };
 
-const updateModMessage = (
-  approved,
-  channel_id,
-  text,
-  user_id,
-  ts,
-  moderator
-) => {
-  let emoji, status;
-  if (approved) {
-    emoji = ":heavy_check_mark:";
-    status = "approved";
-  } else {
-    emoji = ":x:";
-    status = "rejected";
+const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
+  if (status == "deleted") {
+    update({
+      token: TOKEN,
+      channel: MOD_CHANNEL_ID,
+      ts: ts,
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `:speak_no_evil: <@${user_id}>'s at-channel request *has been deleted*.`
+          }
+        }
+      ]
+    });
+    return;
   }
+  const emoji = status == "approved" ? ":heavy_check_mark:" : ":x:";
   update({
     token: TOKEN,
     channel: MOD_CHANNEL_ID,

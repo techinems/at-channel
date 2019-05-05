@@ -60,7 +60,7 @@ const slashChannel = async ({
                   text: "Cancel @channel request"
                 },
                 style: "danger",
-                value: `DEL_${requestId}`
+                action_id: `DEL_${requestId}`
               }
             ]
           }
@@ -68,7 +68,7 @@ const slashChannel = async ({
       });
       break;
     default:
-      postToChannel(text, channel_id, user_id);
+      postToChannel(channel_id, text, user_id);
   }
 };
 

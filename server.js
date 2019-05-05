@@ -5,7 +5,11 @@ require("dotenv").config();
 const { app } = require("./utilities/bolt.js");
 const { isModerator } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
-const { approveMessage, rejectMessage } = require("./handlers/buttons.js");
+const {
+  approveMessage,
+  rejectMessage,
+  deleteRequest
+} = require("./handlers/buttons.js");
 
 app.command(
   "/channel",
@@ -17,7 +21,7 @@ app.command(
 );
 
 app.action(
-  /^(REJ|APP|DEL)_.*/,
+  /^(REJ|APP)_.*/,
   async ({ ack, next }) => {
     ack();
     next();
@@ -41,6 +45,26 @@ app.action(
       approveMessage(channel_id, text, user_id, ts, id);
     } else if (/^REJ_.*/.test(action_id)) {
       rejectMessage(channel_id, text, user_id, ts, id);
+    } else if (/^DEL_.*/.test(action_id)) {
+      deleteRequest(channel_id, text, user_id, ts, id);
     }
+  }
+);
+
+app.action(
+  /^DEL_.*/,
+  async ({ ack, next }) => {
+    ack();
+    next();
+  },
+  async ({
+    action: { action_id },
+    body: {
+      channel: { id: channel_id },
+      user: { id: user_id }
+    }
+  }) => {
+    const ts = action_id.replace("DEL_", "");
+    deleteRequest(channel_id, user_id, ts);
   }
 );

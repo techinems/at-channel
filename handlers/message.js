@@ -15,7 +15,7 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
 //package config
 
 const sendForApproval = async (text, channel_id, user_id, hash) => {
-  postMessage({
+  const { ts } = await postMessage({
     token: TOKEN,
     channel: "at-channel-requests",
     blocks: [
@@ -53,8 +53,7 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
               text: "Approve"
             },
             style: "primary",
-            action_id: `APP_${hash}`,
-            value: "APP_"
+            action_id: `APP_${hash}`
           },
           {
             type: "button",
@@ -63,25 +62,25 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
               text: "Reject"
             },
             style: "danger",
-            action_id: `REJ_${hash}`,
-            value: "REJ_"
+            action_id: `REJ_${hash}`
           }
         ]
       }
     ]
   });
+  return ts;
 };
 
-const postToChannel = (channel, text, user_name) => {
+const postToChannel = (channel_id, text, user_id) => {
   postMessage({
     token: TOKEN,
-    channel: channel,
+    channel: channel_id,
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${user_name}> has sent the following message to <!channel>:\n\n${text}`
+          text: `<@${user_id}> has sent the following message to <!channel>:\n\n${text}`
         }
       }
     ]
