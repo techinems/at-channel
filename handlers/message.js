@@ -88,4 +88,35 @@ const postToChannel = (channel, text, user_name) => {
   });
 };
 
-module.exports = { sendForApproval, postToChannel };
+const sendRejectionDm = (channel_id, user_id, text, rejector) => {
+  postMessage({
+    token: TOKEN,
+    channel: user_id,
+    text: "Your at-channel message has been rejected.",
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: ":face_with_hand_over_mouth: Your message:"
+        }
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `>>>${text}`
+        }
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `has been rejected by <@${rejector}>.`
+        }
+      }
+    ]
+  });
+};
+
+module.exports = { sendForApproval, postToChannel, sendRejectionDm };

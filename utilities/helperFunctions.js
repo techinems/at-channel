@@ -49,7 +49,7 @@ const updateModMessage = (
   text,
   user_id,
   ts,
-  approver
+  moderator
 ) => {
   let emoji, status;
   if (approved) {
@@ -79,7 +79,7 @@ const updateModMessage = (
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${approver}>.`
+          text: `that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${moderator}>.`
         }
       }
     ]

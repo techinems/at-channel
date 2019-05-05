@@ -1,5 +1,5 @@
 //local packages
-const { postToChannel } = require("./message.js");
+const { postToChannel, sendRejectionDm } = require("./message.js");
 const {
   app: {
     client: { chat: update }
@@ -18,4 +18,9 @@ const approveMessage = (
   updateModMessage(true, channel_id, text, user_id, adminMessageTs, approver);
 };
 
-module.exports = { approveMessage };
+const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejector) => {
+  updateModMessage(false, channel_id, text, user_id, adminMessageTs, rejector);
+  sendRejectionDm(channel_id, user_id, text, rejector);
+};
+
+module.exports = { approveMessage, rejectMessage };
