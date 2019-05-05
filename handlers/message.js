@@ -81,17 +81,7 @@ const postToChannel = (channel, text, user_name) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${user_name}> has sent the following message to <!channel>:`
-        }
-      },
-      {
-        type: "divider"
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `>>>${text}`
+          text: `<@${user_name}> has sent the following message to <!channel>:\n\n${text}`
         }
       }
     ]
