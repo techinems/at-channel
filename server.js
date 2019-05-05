@@ -34,19 +34,21 @@ app.action(
       user: { id }
     }
   }) => {
-    const channel_id = /#(.*?)[a-zA-Z1-9]{9}/
+    const channel_id = /<#(.*?)[a-zA-Z0-9]{7,10}>/
       .exec(blocks[0].text.text)[0]
-      .replace("#", "");
+      .replace("<#", "")
+      .replace(">", "");
     const text = blocks[1].text.text.replace("&gt;&gt;&gt;", "");
-    const user_id = /@(.*?)[a-zA-Z1-9]{9}/
+    const user_id = /<@(.*?)[a-zA-Z0-9]{7,10}>/
       .exec(blocks[0].text.text)[0]
-      .replace("@", "");
+      .replace("<@", "")
+      .replace(">", "");
     if (/^APP_.*/.test(action_id)) {
       approveMessage(channel_id, text, user_id, ts, id);
     } else if (/^REJ_.*/.test(action_id)) {
       rejectMessage(channel_id, text, user_id, ts, id);
     } else if (/^DEL_.*/.test(action_id)) {
-      deleteRequest(channel_id, text, user_id, ts, id);
+      cancelRequest(channel_id, text, user_id, ts, id);
     }
   }
 );
