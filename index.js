@@ -1,15 +1,15 @@
+//node packages
 require("dotenv").config();
-const { App } = require("@slack/bolt");
 
-// Initalizes your app with your bot token and signing secret
-const app = new App({
-    token: process.env.SLACK_BOT_TOKEN,
-    signingSecret: process.env.SLACK_SIGNING_SECRET
-});
+//local packages
+const { app } = require("./utilities/bolt.js");
+const { slashChannel } = require("./handlers/slashCommands.js");
 
-(async () => {
-    // Start your app
-    await app.start(process.env.PORT || 3000);
-  
-    console.log("At channel app started!");
-})();
+app.command(
+  "/channel",
+  async ({ ack, next }) => {
+    ack();
+    next();
+  },
+  slashChannel
+);
