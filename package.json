@@ -1,6 +1,6 @@
 {
-  "name": "atchannelbot",
-  "version": "1.0.0",
+  "name": "at-channel",
+  "version": "0.9.0",
   "description": "Allows the approval of @channel requests in a slack workspace",
   "main": "server.js",
   "scripts": {
