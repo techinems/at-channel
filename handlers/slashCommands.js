@@ -2,13 +2,17 @@
 const md5 = require("md5");
 
 //local packages
-const { app } = require("../utilities/bolt.js");
+const {
+  app: {
+    client: {
+      chat: { postEphemeral }
+    }
+  }
+} = require("../utilities/bolt.js");
 const { sendForApproval, postToChannel } = require("./message.js");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
-
-//package config
 
 const slashChannel = async ({
   command: { channel_name, channel_id, user_id, text }
@@ -24,7 +28,7 @@ const slashChannel = async ({
         user_id,
         md5(text)
       );
-      app.client.chat.postEphemeral({
+      postEphemeral({
         token: TOKEN,
         channel: channel_id,
         user: user_id,
