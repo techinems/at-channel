@@ -20,7 +20,8 @@ const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
 const isModerator = async ({
   body: {
     user: { id },
-    channel: { id: channelId }
+    channel: { id: channelId },
+    message: { blocks }
   },
   next
 }) => {
@@ -33,7 +34,20 @@ const isModerator = async ({
     token: USER_TOKEN,
     usergroup: MOD_USERGROUP_ID
   });
-  if (modUsers.includes(id)) return next();
+  const original_poster = /<@(.*?)[a-zA-Z0-9]{7,10}>/
+    .exec(blocks[0].text.text)[0]
+    .replace("<@", "")
+    .replace(">", "");
+  if (modUsers.includes(id) && id != original_poster) return next();
+  if (id == original_poster) {
+    return postEphemeral({
+      token: TOKEN,
+      channel: channelId,
+      user: id,
+      text:
+        ":cry: Sorry! Moderators cannot approve or reject their own requests."
+    });
+  }
   return postEphemeral({
     token: TOKEN,
     channel: channelId,
