@@ -42,14 +42,14 @@ const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejector) => {
   sendRejectionDm(channel_id, user_id, text, rejector);
 };
 
-const deleteRequest = (channel_id, user_id, ts) => {
-  updateModMessage("deleted", channel_id, "", user_id, ts, "");
+const cancelRequest = (channel_id, user_id, ts) => {
+  updateModMessage("cancelled", channel_id, "", user_id, ts, "");
   postEphemeral({
     token: TOKEN,
     channel: channel_id,
     user: user_id,
-    text: ":hugging_face: Your at-channel request *has been deleted*."
+    text: ":hugging_face: Your at-channel request *has been cancelled*."
   });
 };
 
-module.exports = { approveMessage, rejectMessage, deleteRequest };
+module.exports = { approveMessage, rejectMessage, cancelRequest };

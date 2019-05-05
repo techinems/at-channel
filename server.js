@@ -8,7 +8,7 @@ const { slashChannel } = require("./handlers/slashCommands.js");
 const {
   approveMessage,
   rejectMessage,
-  deleteRequest
+  cancelRequest
 } = require("./handlers/buttons.js");
 
 app.command(
@@ -64,7 +64,7 @@ app.action(
       user: { id: user_id }
     }
   }) => {
-    const ts = action_id.replace("DEL_", "");
-    deleteRequest(channel_id, user_id, ts);
+    const ts = action_id.replace("CAN_", "");
+    cancelRequest(channel_id, user_id, ts);
   }
 );

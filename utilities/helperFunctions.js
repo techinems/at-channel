@@ -44,7 +44,7 @@ const isModerator = async ({
 };
 
 const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
-  if (status == "deleted") {
+  if (status == "cancelled") {
     update({
       token: TOKEN,
       channel: MOD_CHANNEL_ID,
@@ -54,7 +54,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `:speak_no_evil: <@${user_id}>'s at-channel request *has been deleted*.`
+            text: `:speak_no_evil: <@${user_id}>'s at-channel request *has been cancelled*.`
           }
         }
       ]
