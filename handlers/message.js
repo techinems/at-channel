@@ -18,6 +18,7 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
   const { ts } = await postMessage({
     token: TOKEN,
     channel: "at-channel-requests",
+    text: "There's a new at-channel request!",
     blocks: [
       {
         type: "section",
@@ -75,6 +76,7 @@ const postToChannel = (channel_id, text, user_id) => {
   postMessage({
     token: TOKEN,
     channel: channel_id,
+    text: `<@${user_id}> has sent a message to <!channel>.`,
     blocks: [
       {
         type: "section",
@@ -87,11 +89,11 @@ const postToChannel = (channel_id, text, user_id) => {
   });
 };
 
-const sendRejectionDm = (channel_id, user_id, text, rejector) => {
+const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
   postMessage({
     token: TOKEN,
     channel: user_id,
-    text: "Your at-channel message has been rejected.",
+    text: `Your at-channel request has been rejected by <@${rejecter}>`,
     blocks: [
       {
         type: "section",
@@ -111,7 +113,7 @@ const sendRejectionDm = (channel_id, user_id, text, rejector) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `has been rejected by <@${rejector}>.`
+          text: `has been rejected by <@${rejecter}>.`
         }
       }
     ]
