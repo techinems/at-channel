@@ -68,7 +68,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `:speak_no_evil: <@${user_id}>'s at-channel request *has been cancelled*.`
+            text: `:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`
           }
         }
       ]
