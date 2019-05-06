@@ -21,7 +21,7 @@ app.command(
 );
 
 app.action(
-  /^(REJ|APP)_.*/,
+  /^(APP|REJ)_.*/,
   async ({ ack, next }) => {
     ack();
     next();
@@ -52,7 +52,7 @@ app.action(
 );
 
 app.action(
-  /^DEL_.*/,
+  /^CAN_.*/,
   async ({ ack, next }) => {
     ack();
     next();
