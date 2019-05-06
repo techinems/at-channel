@@ -47,8 +47,6 @@ app.action(
       approveMessage(channel_id, text, user_id, ts, id);
     } else if (/^REJ_.*/.test(action_id)) {
       rejectMessage(channel_id, text, user_id, ts, id);
-    } else if (/^DEL_.*/.test(action_id)) {
-      cancelRequest(channel_id, text, user_id, ts, id);
     }
   }
 );
