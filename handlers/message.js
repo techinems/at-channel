@@ -76,7 +76,7 @@ const postToChannel = (channel_id, text, user_id) => {
   postMessage({
     token: TOKEN,
     channel: channel_id,
-    text: `<@${user_id}> has sent a message to <!channel>.`,
+    text: `<@${user_id}> has sent a message to the channel.`,
     blocks: [
       {
         type: "section",
