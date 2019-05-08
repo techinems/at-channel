@@ -10,7 +10,7 @@ const {
   }
 } = require("../utilities/bolt.js");
 const { sendForApproval, postToChannel } = require("./message.js");
-
+const { randomEmoji } = require("../utilities/helperFunctions");
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
@@ -22,7 +22,7 @@ const slashChannel = async ({
       token: TOKEN,
       channel: channel_id,
       user: user_id,
-      text: ":thinking_face: Maybe try actually writing something?"
+      text:  randomEmoji("medium") + " Maybe try actually writing something?"
     });
     return;
   }
@@ -42,7 +42,7 @@ const slashChannel = async ({
         channel: channel_id,
         user: user_id,
         text:
-          ":raised_hands: Thanks for your request! It's been sent to the moderators for approval."
+          randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
       });
       postMessage({
         token: TOKEN,

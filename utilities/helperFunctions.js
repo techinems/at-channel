@@ -10,6 +10,9 @@ const {
   }
 } = require("../utilities/bolt.js");
 
+// Note you will need to change this to fit emojis that exist in your workspace
+const emojisList = require("./emojis.json");
+
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 const USER_TOKEN = process.env.SLACK_USER_TOKEN;
@@ -75,6 +78,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     });
     return;
   }
+  
   const emoji = status == "approved" ? ":heavy_check_mark:" : ":x:";
   update({
     token: TOKEN,
@@ -103,4 +107,25 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   });
 };
 
-module.exports = { isModerator, updateModMessage };
+const randomEmoji = (sentiment) => {
+  let emojis = [];
+  switch(sentiment){
+    case "happy":
+      emojis = emojisList.happy;
+      break;
+    case "medium":
+      emojis = emojisList.medium;
+      break;
+    case "sad":
+      emojis = emojisList.sad;
+      break;
+    default:
+      emojis.concat(emojisList.happy);
+      emojis.concat(emojisList.medium);
+      emojis.concat(emojisList.sad);
+      break;
+  }
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
+
+module.exports = { isModerator, updateModMessage, randomEmoji };
