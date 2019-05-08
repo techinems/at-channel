@@ -1,0 +1,23 @@
+{
+    "happy": [
+        ":smile:",
+        ":partyparrot:",
+        ":logan_cheesin:",
+        ":dan:",
+        ":+1:",
+        ":+2:"
+    ],
+    "medium": [
+        ":shrug:",
+        ":logan:",
+        ":confused:",
+        ":poop:"
+    ],
+    "sad": [
+        ":sob:",
+        ":logan_displeased:",
+        ":shurl:",
+        ":x:",
+        ":cry:"
+    ]
+}
