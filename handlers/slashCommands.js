@@ -24,6 +24,7 @@ const slashChannel = async ({
       user: user_id,
       text: ":thinking_face: Maybe try actually writing something?"
     });
+    return;
   }
   switch (channel_name) {
     case "general":
