@@ -11,7 +11,7 @@ const {
 } = require("../utilities/bolt.js");
 
 // Note you will need to change this to fit emojis that exist in your workspace
-const emojisList = require("./emoji.json");
+const emojisList = require("./emojis.json");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
