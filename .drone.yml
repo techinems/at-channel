@@ -1,8 +1,14 @@
-pipeline:
+kind: pipeline
+name: default
 
 steps:
-  image: docker/compose
-  commands:
-    - docker compose up -d at-channel
-  volume:
-    - /var/run/docker.sock:/var/run/docker.sock
+- name: deploy
+  image: appleboy/drone-ssh
+  settings:
+    host: lp12.rpiambulance.com
+    username: drone
+    password:
+      from_secret: SSH_PASSWORD
+    port: 22
+    script:
+      - pwd
