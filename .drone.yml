@@ -1,0 +1,8 @@
+pipeline:
+
+steps:
+  image: docker/compose
+  commands:
+    - docker compose up -d at-channel
+  volume:
+    - /var/run/docker.sock:/var/run/docker.sock
