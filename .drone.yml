@@ -6,8 +6,7 @@ steps:
     image: appleboy/drone-ssh
     settings:
       host: lp12.rpiambulance.com
-      username:
-        from_secret: SSH_USERNAME
+      username: drone
       password:
         from_secret: SSH_PASSWORD
       port: 22
