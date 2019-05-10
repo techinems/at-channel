@@ -11,5 +11,5 @@ steps:
         from_secret: SSH_PASSWORD
       port: 22
       script:
-        - export DOCKER_HOST=127.0.0.1
+        - export DOCKER_HOST=127.0.0.1:2375
         - docker-compose -f /drone/docker-compose.yml up -d at-channel
