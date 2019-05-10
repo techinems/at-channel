@@ -1,14 +1,14 @@
 kind: pipeline
-name: default
+name: deploy_at-channel
 
 steps:
-- name: deploy
-  image: appleboy/drone-ssh
-  settings:
-    host: lp12.rpiambulance.com
-    username: drone
-    password:
-      from_secret: SSH_PASSWORD
-    port: 22
-    script:
-      - pwd
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host: lp12.rpiambulance.com
+      username: drone
+      password:
+        from_secret: SSH_PASSWORD
+      port: 22
+      script:
+        - docker-compose -f /drone/docker-compose.yml up -d at-channel
