@@ -23,6 +23,6 @@
     "md5": "^2.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.0"
+    "nodemon": "^1.19.1"
   }
 }
