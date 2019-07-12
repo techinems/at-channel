@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/rpiambulance/atchannelbot#readme",
   "dependencies": {
-    "@slack/bolt": "^1.0.1",
+    "@slack/bolt": "^1.2.0",
     "dotenv": "^8.0.0",
     "eslint": "^6.0.1",
     "md5": "^2.2.1"
