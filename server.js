@@ -2,6 +2,7 @@
 require("dotenv").config();
 
 //local packages
+const emojiRegex = require("emoji-regex")();
 const { app } = require("./utilities/bolt.js");
 const { isModerator } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
@@ -38,7 +39,7 @@ app.action(
       .exec(blocks[0].text.text)[0]
       .replace("<#", "")
       .replace(">", "");
-    const text = blocks[1].text.text.replace("&gt;&gt;&gt;", "");
+    const text = blocks[1].text.text.replace("&gt;&gt;&gt;", "").replace(emojiRegex, "");
     const user_id = /<@(.*?)[a-zA-Z0-9]{7,10}>/
       .exec(blocks[0].text.text)[0]
       .replace("<@", "")
