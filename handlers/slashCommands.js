@@ -1,5 +1,6 @@
 //node packages
 const md5 = require("md5");
+const emojiRegex = require("emoji-regex")();
 
 //local packages
 const {
@@ -17,6 +18,7 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
 const slashChannel = async ({
   command: { channel_name, channel_id, user_id, text }
 }) => {
+  text = text.replace(emojiRegex, "");
   if (text == "" || text == "&gt;" || text == "&gt;&gt;&gt;") {
     postEphemeral({
       token: TOKEN,
