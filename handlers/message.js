@@ -80,7 +80,7 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
   return ts;
 };
 
-const postToChannel = (channel_id, text, user_id, atChannel) => {
+const postToChannel = (channel_id, text, user_id, atChannel = true) => {
   const atChannelText = atChannel ? "<!channel>" : "the channel";
   postMessage({
     token: TOKEN,
