@@ -22,6 +22,7 @@ app.command(
 );
 
 app.action(
+  //APP = approved; NOAT = approved without @channel; REJ = reject
   /^(APP|NOAT|REJ)_.*/,
   async ({ ack, next }) => {
     ack();
