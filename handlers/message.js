@@ -60,6 +60,14 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
             type: "button",
             text: {
               type: "plain_text",
+              text: "Approve without @channel"
+            },
+            action_id: `NOAT_${hash}`
+          },
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
               text: "Reject"
             },
             style: "danger",
