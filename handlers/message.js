@@ -60,6 +60,14 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
             type: "button",
             text: {
               type: "plain_text",
+              text: "Approve without @channel"
+            },
+            action_id: `NOAT_${hash}`
+          },
+          {
+            type: "button",
+            text: {
+              type: "plain_text",
               text: "Reject"
             },
             style: "danger",
@@ -72,7 +80,8 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
   return ts;
 };
 
-const postToChannel = (channel_id, text, user_id) => {
+const postToChannel = (channel_id, text, user_id, atChannel) => {
+  const atChannelText = atChannel ? "<!channel>" : "the channel";
   postMessage({
     token: TOKEN,
     channel: channel_id,
@@ -82,7 +91,7 @@ const postToChannel = (channel_id, text, user_id) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${user_id}> has sent the following message to <!channel>:\n\n${text}`
+          text: `<@${user_id}> has sent the following message to ${atChannelText}:\n\n${text}`
         }
       }
     ]
