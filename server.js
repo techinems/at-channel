@@ -46,7 +46,7 @@ app.action(
       .replace(">", "");
     if (/^APP_.*/.test(action_id)) {
       approveMessage(channel_id, text, user_id, ts, id);
-    } else if (/^REJ_.*/.test(action_id)) {
+    } else if (/^NOAT_.*/.test(action_id)) {
       approveNoAt(channel_id, text, user_id, ts, id);
     } else if (/^REJ_.*/.test(action_id)) {
       rejectMessage(channel_id, text, user_id, ts, id);
