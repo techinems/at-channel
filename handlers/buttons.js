@@ -19,9 +19,21 @@ const approveMessage = (
   adminMessageTs,
   approver
 ) => {
-  postToChannel(channel_id, text, user_id);
+  postToChannel(channel_id, text, user_id, true);
   updateModMessage(
     "approved",
+    channel_id,
+    text,
+    user_id,
+    adminMessageTs,
+    approver
+  );
+};
+
+const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
+  postToChannel(channel_id, text, user_id, false);
+  updateModMessage(
+    "approved without at-channel",
     channel_id,
     text,
     user_id,
@@ -52,4 +64,4 @@ const cancelRequest = (channel_id, user_id, ts) => {
   });
 };
 
-module.exports = { approveMessage, rejectMessage, cancelRequest };
+module.exports = { approveMessage, approveNoAt, rejectMessage, cancelRequest };

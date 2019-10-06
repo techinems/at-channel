@@ -7,6 +7,7 @@ const { isModerator } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
 const {
   approveMessage,
+  approveNoAt,
   rejectMessage,
   cancelRequest
 } = require("./handlers/buttons.js");
@@ -21,7 +22,7 @@ app.command(
 );
 
 app.action(
-  /^(APP|REJ)_.*/,
+  /^(APP|NOAT|REJ)_.*/,
   async ({ ack, next }) => {
     ack();
     next();
@@ -45,6 +46,8 @@ app.action(
       .replace(">", "");
     if (/^APP_.*/.test(action_id)) {
       approveMessage(channel_id, text, user_id, ts, id);
+    } else if (/^REJ_.*/.test(action_id)) {
+      approveNoAt(channel_id, text, user_id, ts, id);
     } else if (/^REJ_.*/.test(action_id)) {
       rejectMessage(channel_id, text, user_id, ts, id);
     }
