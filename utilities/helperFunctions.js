@@ -78,8 +78,13 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     });
     return;
   }
-  
-  const emoji = status == "approved" ? ":heavy_check_mark:" : ":x:";
+
+  const emoji =
+    status == "approved"
+      ? ":heavy_check_mark:"
+      : status == "approved without at-channel"
+      ? ":heavy_minus_sign:"
+      : ":x:";
   update({
     token: TOKEN,
     channel: MOD_CHANNEL_ID,
@@ -107,9 +112,9 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   });
 };
 
-const randomEmoji = (sentiment) => {
+const randomEmoji = sentiment => {
   let emojis = [];
-  switch(sentiment){
+  switch (sentiment) {
     case "happy":
       emojis = emojisList.happy;
       break;
