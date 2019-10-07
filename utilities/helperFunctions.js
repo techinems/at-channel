@@ -20,9 +20,9 @@ const MOD_CHANNEL_ID = process.env.MOD_CHANNEL_ID;
 const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
 
-const getMarkdownSection = textForSection => ({ type: "section", text: { type: "mrkdwn", text: textForSection } });
+const genMarkdownSection = textForSection => ({ type: "section", text: { type: "mrkdwn", text: textForSection } });
 
-const getActionButton = (action_id, text, style = null) => {
+const genActionButton = (action_id, text, style = null) => {
   let btn = { type: "button", text: { type: "plain_text", text }, action_id };
   if (style) btn.style = style;
   return btn;
@@ -72,7 +72,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, mod) => {
       channel: MOD_CHANNEL_ID,
       ts: ts,
       blocks: [
-        getMarkdownSection(`:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`)
+        genMarkdownSection(`:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`)
       ]
     });
     return;
@@ -89,9 +89,9 @@ const updateModMessage = (status, channel_id, text, user_id, ts, mod) => {
     channel: MOD_CHANNEL_ID,
     ts: ts,
     blocks: [
-      getMarkdownSection(`${emoji} The message:`),
-      getMarkdownSection(`>>>${text}`),
-      getMarkdownSection(`that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${mod}>.`)
+      genMarkdownSection(`${emoji} The message:`),
+      genMarkdownSection(`>>>${text}`),
+      genMarkdownSection(`that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${mod}>.`)
     ]
   });
 };
@@ -109,4 +109,4 @@ const randomEmoji = sentiment => {
   return emojis[Math.floor(Math.random() * emojis.length)];
 };
 
-module.exports = { isModerator, updateModMessage, randomEmoji, getMarkdownSection, getActionButton, ackNext };
+module.exports = { isModerator, updateModMessage, randomEmoji, genMarkdownSection, genActionButton, ackNext };

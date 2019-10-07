@@ -8,7 +8,7 @@ const {
     }
   }
 } = require("../utilities/bolt.js");
-const { getMarkdownSection, getActionButton } = require("../utilities/helperFunctions");
+const { genMarkdownSection, genActionButton } = require("../utilities/helperFunctions");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -21,16 +21,16 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
     channel: "at-channel-requests",
     text: "There's a new at-channel request!",
     blocks: [
-      getMarkdownSection(`:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use at-channel in <#${channel_id}>. The message is:`),
-      getMarkdownSection(`>>>${text}`),
+      genMarkdownSection(`:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use at-channel in <#${channel_id}>. The message is:`),
+      genMarkdownSection(`>>>${text}`),
       { type: "divider" },
-      getMarkdownSection("Do you want to *approve* or *reject* this message?"),
+      genMarkdownSection("Do you want to *approve* or *reject* this message?"),
       {
         type: "actions",
         elements: [
-          getActionButton(`APP_${hash}`, "Approve", "primary"),
-          getActionButton(`NOAT_${hash}`, "Approve without @channel"),
-          getActionButton(`REJ_${hash}`, "Reject", "danger")
+          genActionButton(`APP_${hash}`, "Approve", "primary"),
+          genActionButton(`NOAT_${hash}`, "Approve without @channel"),
+          genActionButton(`REJ_${hash}`, "Reject", "danger")
         ]
       }
     ]
@@ -45,7 +45,7 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
     channel: channel_id,
     text: `<@${user_id}> has sent a message to the channel.`,
     blocks: [
-      getMarkdownSection(`<@${user_id}> has sent the following message to ${atChannelText}:\n\n${text}`)
+      genMarkdownSection(`<@${user_id}> has sent the following message to ${atChannelText}:\n\n${text}`)
     ]
   });
 };
@@ -56,9 +56,9 @@ const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
     channel: user_id,
     text: `Your at-channel request has been rejected by <@${rejecter}>`,
     blocks: [
-      getMarkdownSection(":face_with_hand_over_mouth: Your message:"),
-      getMarkdownSection(`>>>${text}`),
-      getMarkdownSection(`has been rejected by <@${rejecter}>.`)
+      genMarkdownSection(":face_with_hand_over_mouth: Your message:"),
+      genMarkdownSection(`>>>${text}`),
+      genMarkdownSection(`has been rejected by <@${rejecter}>.`)
     ]
   });
 };

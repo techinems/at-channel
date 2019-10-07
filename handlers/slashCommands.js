@@ -11,7 +11,7 @@ const {
   }
 } = require("../utilities/bolt.js");
 const { sendForApproval, postToChannel } = require("./message.js");
-const { randomEmoji, getMarkdownSection, getActionButton } = require("../utilities/helperFunctions");
+const { randomEmoji, genMarkdownSection, genActionButton } = require("../utilities/helperFunctions");
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
@@ -51,13 +51,13 @@ const slashChannel = async ({
         user: user_id,
         text: "Your message has been sent to the moderators for approval.",
         blocks: [
-          getMarkdownSection(`You requested an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`),
+          genMarkdownSection(`You requested an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`),
           { type: "divider" },
-          getMarkdownSection('*Want to cancel your message?*'),
+          genMarkdownSection('*Want to cancel your message?*'),
           {
             type: "actions",
             elements: [
-              getActionButton(`CAN_${requestId}`, "Cancel @channel request", "danger")
+              genActionButton(`CAN_${requestId}`, "Cancel @channel request", "danger")
             ]
           }
         ]
