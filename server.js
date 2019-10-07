@@ -3,7 +3,7 @@ require("dotenv").config();
 
 //local packages
 const { app } = require("./utilities/bolt.js");
-const { isModerator } = require("./utilities/helperFunctions.js");
+const { isModerator, ackNext } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
 const {
   approveMessage,
@@ -12,22 +12,12 @@ const {
   cancelRequest
 } = require("./handlers/buttons.js");
 
-app.command(
-  "/channel",
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
-  slashChannel
-);
+app.command("/channel", ackNext, slashChannel);
 
 app.action(
   //APP = approved; NOAT = approved without @channel; REJ = reject
   /^(APP|NOAT|REJ)_.*/,
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
+  ackNext,
   isModerator,
   async ({
     action: { action_id },
@@ -57,10 +47,7 @@ app.action(
 
 app.action(
   /^CAN_.*/,
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
+  ackNext,
   async ({
     action: { action_id },
     body: {
