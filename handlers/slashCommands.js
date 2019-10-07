@@ -11,7 +11,7 @@ const {
   }
 } = require("../utilities/bolt.js");
 const { sendForApproval, postToChannel } = require("./message.js");
-const { randomEmoji } = require("../utilities/helperFunctions");
+const { randomEmoji, genMarkdownSection, genActionButton } = require("../utilities/helperFunctions");
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
@@ -43,8 +43,7 @@ const slashChannel = async ({
         token: TOKEN,
         channel: channel_id,
         user: user_id,
-        text:
-          randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
+        text: randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
       });
       postMessage({
         token: TOKEN,
@@ -52,35 +51,13 @@ const slashChannel = async ({
         user: user_id,
         text: "Your message has been sent to the moderators for approval.",
         blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: `You requsted an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`
-            }
-          },
-          {
-            type: "divider"
-          },
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "*Want to cancel your message?*"
-            }
-          },
+          genMarkdownSection(`You requested an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`),
+          { type: "divider" },
+          genMarkdownSection('*Want to cancel your message?*'),
           {
             type: "actions",
             elements: [
-              {
-                type: "button",
-                text: {
-                  type: "plain_text",
-                  text: "Cancel @channel request"
-                },
-                style: "danger",
-                action_id: `CAN_${requestId}`
-              }
+              genActionButton(`CAN_${requestId}`, "Cancel @channel request", "danger")
             ]
           }
         ]

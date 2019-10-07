@@ -10,8 +10,8 @@ const {
   }
 } = require("../utilities/bolt.js");
 
-// Note you will need to change this to fit emojis that exist in your workspace
-const emojisList = require("./emojis.json");
+// Note all emojis used must already be defined within the workspace for them to work
+const emojisList = require("./emojis");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -19,6 +19,16 @@ const USER_TOKEN = process.env.SLACK_USER_TOKEN;
 const MOD_CHANNEL_ID = process.env.MOD_CHANNEL_ID;
 const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
+
+const genMarkdownSection = textForSection => ({ type: "section", text: { type: "mrkdwn", text: textForSection } });
+
+const genActionButton = (action_id, text, style = null) => {
+  let btn = { type: "button", text: { type: "plain_text", text }, action_id };
+  if (style) btn.style = style;
+  return btn;
+};
+
+const ackNext = async (ack, next) => { ack(); next(); }
 
 const isModerator = async ({
   body: {
@@ -42,38 +52,27 @@ const isModerator = async ({
     .replace("<@", "")
     .replace(">", "");
   if (modUsers.includes(id) && id != original_poster) return next();
+  
+  let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests."
   if (id == original_poster) {
-    return postEphemeral({
-      token: TOKEN,
-      channel: channelId,
-      user: id,
-      text:
-        ":cry: Sorry! Moderators cannot approve or reject their own requests."
-    });
+    text = ":cry: Sorry! Moderators cannot approve or reject their own requests.";
   }
   return postEphemeral({
     token: TOKEN,
     channel: channelId,
     user: id,
-    text:
-      ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests."
+    text: text
   });
 };
 
-const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
+const updateModMessage = (status, channel_id, text, user_id, ts, mod) => {
   if (status == "cancelled") {
     update({
       token: TOKEN,
       channel: MOD_CHANNEL_ID,
       ts: ts,
       blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`
-          }
-        }
+        genMarkdownSection(`:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`)
       ]
     });
     return;
@@ -90,47 +89,24 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     channel: MOD_CHANNEL_ID,
     ts: ts,
     blocks: [
-      {
-        type: "section",
-        text: { type: "mrkdwn", text: `${emoji} The message:` }
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `>>>${text}`
-        }
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${moderator}>.`
-        }
-      }
+      genMarkdownSection(`${emoji} The message:`),
+      genMarkdownSection(`>>>${text}`),
+      genMarkdownSection(`that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${mod}>.`)
     ]
   });
 };
 
 const randomEmoji = sentiment => {
   let emojis = [];
-  switch (sentiment) {
-    case "happy":
-      emojis = emojisList.happy;
-      break;
-    case "medium":
-      emojis = emojisList.medium;
-      break;
-    case "sad":
-      emojis = emojisList.sad;
-      break;
-    default:
-      emojis.concat(emojisList.happy);
-      emojis.concat(emojisList.medium);
-      emojis.concat(emojisList.sad);
-      break;
+  const availableSentiments = Object.keys(emojisList);
+  if (availableSentiments.indexOf(sentiment) !== -1) {
+    emojis = emojisList[sentiment];
+  } else {
+    for (const s of availableSentiments) {
+      emojis = emojis.concat(emojisList[s]);
+    }
   }
   return emojis[Math.floor(Math.random() * emojis.length)];
 };
 
-module.exports = { isModerator, updateModMessage, randomEmoji };
+module.exports = { isModerator, updateModMessage, randomEmoji, genMarkdownSection, genActionButton, ackNext };
