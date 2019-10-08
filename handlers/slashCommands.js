@@ -24,47 +24,41 @@ const slashChannel = async ({
       token: TOKEN,
       channel: channel_id,
       user: user_id,
-      text:  randomEmoji("medium") + " Maybe try actually writing something?"
+      text:  `${randomEmoji("medium")} Maybe try actually writing something?`
     });
     return;
   }
-  switch (channel_name) {
-    case "general":
-    case "alerts":
-    case "random":
-    case "scheduling":
-      const requestId = await sendForApproval(
-        text,
-        channel_id,
-        user_id,
-        md5(text)
-      );
-      postEphemeral({
-        token: TOKEN,
-        channel: channel_id,
-        user: user_id,
-        text: randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
-      });
-      postMessage({
-        token: TOKEN,
-        channel: user_id,
-        user: user_id,
-        text: "Your message has been sent to the moderators for approval.",
-        blocks: [
-          genMarkdownSection(`You requested an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`),
-          { type: "divider" },
-          genMarkdownSection('*Want to cancel your message?*'),
-          {
-            type: "actions",
-            elements: [
-              genActionButton(`CAN_${requestId}`, "Cancel @channel request", "danger")
-            ]
-          }
-        ]
-      });
-      break;
-    default:
-      postToChannel(channel_id, text, user_id);
+
+  const moderatedChannels = process.env.MODERATED_CHANNELS ? process.env.MODERATED_CHANNELS.split(',') : [];
+  if (moderatedChannels.indexOf(channel_name) !== -1) {
+    const requestId = await sendForApproval(text, channel_id, user_id, md5(text));
+
+    postEphemeral({
+      token: TOKEN,
+      channel: channel_id,
+      user: user_id,
+      text: `${randomEmoji("happy")} Thanks for your request! It's been sent to the moderators for approval.`
+    });
+
+    postMessage({
+      token: TOKEN,
+      channel: user_id,
+      user: user_id,
+      text: "Your message has been sent to the moderators for approval.",
+      blocks: [
+        genMarkdownSection(`You requested an at-channel messasge to be sent to <#${channel_id}>. It has been sent to the moderators for approval.\nYou wrote:\n>>>${text}`),
+        { type: "divider" },
+        genMarkdownSection('*Want to cancel your message?*'),
+        {
+          type: "actions",
+          elements: [
+            genActionButton(`CAN_${requestId}`, "Cancel @channel request", "danger")
+          ]
+        }
+      ]
+    });
+  } else {
+    postToChannel(channel_id, text, user_id);
   }
 };
 
