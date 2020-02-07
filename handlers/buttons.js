@@ -12,6 +12,11 @@ const {
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
+/**
+Three similar actions for approved, approved without at and rejected.
+Calls to post to the original channel, updates the moderatation
+channel, and notifies the requestor if required are made.
+*/
 const approveMessage = (
   channel_id,
   text,

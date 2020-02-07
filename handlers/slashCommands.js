@@ -28,6 +28,7 @@ const slashChannel = async ({
     });
     return;
   }
+  //determine if we are in a moderated channel, otherwise post automatically.
   switch (channel_name) {
     case "general":
     case "alerts":

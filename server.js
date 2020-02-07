@@ -22,6 +22,9 @@ app.command(
 );
 
 app.action(
+  /** Action for if message was approved, rejected, or aprroved without @channe
+  * determines which case and posts appropriate message */
+  
   //APP = approved; NOAT = approved without @channel; REJ = reject
   /^(APP|NOAT|REJ)_.*/,
   async ({ ack, next }) => {
@@ -56,6 +59,7 @@ app.action(
 );
 
 app.action(
+  /** Action for when poster cancels at channel request */
   /^CAN_.*/,
   async ({ ack, next }) => {
     ack();

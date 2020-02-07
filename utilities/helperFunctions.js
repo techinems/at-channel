@@ -20,6 +20,9 @@ const MOD_CHANNEL_ID = process.env.MOD_CHANNEL_ID;
 const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
 
+/** Query Slack to determine if user has approriate moderating permissions
+* if not post ephemeral to user saying why they can't approve,
+* otherwise execute approriate action */
 const isModerator = async ({
   body: {
     user: { id },
@@ -78,7 +81,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     });
     return;
   }
-
+  // determine appriate emoji for mod message based on action
   const emoji =
     status == "approved"
       ? ":heavy_check_mark:"
@@ -112,6 +115,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   });
 };
 
+/** return a random emoji of based on categories. Emjoi list in emojis.json */
 const randomEmoji = sentiment => {
   let emojis = [];
   switch (sentiment) {
