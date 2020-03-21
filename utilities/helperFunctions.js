@@ -20,7 +20,7 @@ const MOD_CHANNEL_ID = process.env.MOD_CHANNEL_ID;
 const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
 
-/***
+/**
  * Query Slack to determine if user has approriate moderating permissions
  * if not post ephemeral to user saying why they can't approve, otherwise execute approriate action
  * 
@@ -67,7 +67,7 @@ const isModerator = async ({
   });
 };
 
-/***
+/**
  * updates message in moderation channel based on action chosen
  * 
  * @param {string} status - one of "cancelled", "approved", "approved without at-channel"
@@ -129,7 +129,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   });
 };
 
-/***
+/**
  * return a random emoji of based on categories. Emjoi list in emojis.json 
  * 
  * @param {string} sentiment - one of "happy", "medium", "sad", or ""

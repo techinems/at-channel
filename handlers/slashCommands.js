@@ -15,7 +15,7 @@ const { randomEmoji } = require("../utilities/helperFunctions");
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
-/***
+/**
  * Used to determine if a request was sent in a moderated channel, post the request to the moderation channel
  * and send information to the requester. If not in a moderated channel, post the message automatically
  * 
