@@ -13,7 +13,7 @@ const {
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 /**
- * actions for approved message, calls to post to the original channel and updates the moderatation
+ * actions for approved message, calls to post to the original channel and updates the moderation
  * channel
  * 
  * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
@@ -41,7 +41,7 @@ const approveMessage = (
 };
 
 /**
- * actions for approved message without at channel, calls to post to the original channel and updates the moderatation
+ * actions for approved message without at channel, calls to post to the original channel and updates the moderation
  * channel
  * 
  * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
@@ -63,7 +63,7 @@ const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
 };
 
 /**
- * actions for denyied/rejected message, updates the moderatation channel and sends rejection DM to requester.
+ * actions for denyied/rejected message, updates the moderation channel and sends rejection DM to requester.
  * 
  * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
  * @param {string} text - message that was requested
