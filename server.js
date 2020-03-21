@@ -22,7 +22,7 @@ app.command(
 );
 
 app.action(
-  /** Action for if message was approved, rejected, or aprroved without @channe
+  /** Action for if message was approved, rejected, or aprroved without @channel
   * determines which case and posts appropriate message */
   
   //APP = approved; NOAT = approved without @channel; REJ = reject

@@ -15,6 +15,15 @@ const { randomEmoji } = require("../utilities/helperFunctions");
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
+/***
+ * Used to determine if a request was sent in a moderated channel, post the request to the moderation channel
+ * and send information to the requester. If not in a moderated channel, post the message automatically
+ * 
+ * @param {string} channel_name - slack channel name such as "general" (no #)
+ * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
+ * @param {string} user_id - slack user ID (no <@, >)
+ * @param {string} text - message to be posted
+ */
 const slashChannel = async ({
   command: { channel_name, channel_id, user_id, text }
 }) => {
@@ -34,12 +43,14 @@ const slashChannel = async ({
     case "alerts":
     case "random":
     case "scheduling":
+      // send request to the moderation channel
       const requestId = await sendForApproval(
         text,
         channel_id,
         user_id,
         md5(text)
       );
+      // Post emphemeral to user in active channel
       postEphemeral({
         token: TOKEN,
         channel: channel_id,
@@ -47,6 +58,7 @@ const slashChannel = async ({
         text:
           randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
       });
+      // Post slackbot message to user to allow for cancelation of request
       postMessage({
         token: TOKEN,
         channel: user_id,

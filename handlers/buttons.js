@@ -12,11 +12,16 @@ const {
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
-/**
-Three similar actions for approved, approved without at and rejected.
-Calls to post to the original channel, updates the moderatation
-channel, and notifies the requestor if required are made.
-*/
+/***
+ * actions for approved message, calls to post to the original channel and updates the moderatation
+ * channel
+ * 
+ * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
+ * @param {string} text - message that was requested
+ * @param {string} user_id - slack user ID (no <@, >)
+ * @param {string} adminMessageTs - timestamp of message in the moderation channel
+ * @param {string} approver - user ID of moderator approving
+ */
 const approveMessage = (
   channel_id,
   text,
@@ -35,6 +40,16 @@ const approveMessage = (
   );
 };
 
+/***
+ * actions for approved message without at channel, calls to post to the original channel and updates the moderatation
+ * channel
+ * 
+ * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
+ * @param {string} text - message that was requested
+ * @param {string} user_id - slack user ID (no <@, >)
+ * @param {string} adminMessageTs - timestamp of message in the moderation channel
+ * @param {string} approver - user ID of moderator approving
+ */
 const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
   postToChannel(channel_id, text, user_id, false);
   updateModMessage(
@@ -47,18 +62,34 @@ const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
   );
 };
 
-const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejector) => {
+/***
+ * actions for denyied/rejected message, updates the moderatation channel and sends rejection DM to requester.
+ * 
+ * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
+ * @param {string} text - message that was requested
+ * @param {string} user_id - slack user ID (no <@, >)
+ * @param {string} adminMessageTs - timestamp of message in the moderation channel
+ * @param {string} rejecter - user ID of moderator denying request
+ */
+const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejecter) => {
   updateModMessage(
     "rejected",
     channel_id,
     text,
     user_id,
     adminMessageTs,
-    rejector
+    rejecter
   );
-  sendRejectionDm(channel_id, user_id, text, rejector);
+  sendRejectionDm(channel_id, user_id, text, rejecter);
 };
 
+/***
+ * action for message request cancelled by requester
+ * 
+ * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
+ * @param {string} user_id - slack user ID (no <@, >)
+ * @param {string} ts - timestamp ID of moderation message
+ */
 const cancelRequest = (channel_id, user_id, ts) => {
   updateModMessage("cancelled", channel_id, "", user_id, ts, "");
   postEphemeral({
