@@ -95,7 +95,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     });
     return;
   }
-  // determine appriate emoji for mod message based on action
+  // determine appropriate emoji for mod message based on action
   const emoji =
     status == "approved"
       ? ":heavy_check_mark:"
