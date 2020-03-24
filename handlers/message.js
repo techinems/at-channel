@@ -13,7 +13,7 @@ const {
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 //package config
-/** provides functions for posting nicely formated messages in approriate channels */
+/** provides functions for posting nicely formated messages in appropriate channels */
 
 /**
  *  prepare and post message in the moderation channel for new requests
