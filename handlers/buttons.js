@@ -16,7 +16,7 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
  * Actions for an approved message: posts the message to the channel requested and updates
  * the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
  * characters)
  * @param {string} text - Message that was requested
  * @param {string} user_id - Slack user ID (without <, >, or # characters)
@@ -45,7 +45,7 @@ const approveMessage = (
  * Actions for a message approved without @channel: posts the message to the channel
  * requested (without an @channel) and updates the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
  * characters)
  * @param {string} text - Message that was requested
  * @param {string} user_id - Slack user ID (without <, >, or # characters)
@@ -68,7 +68,7 @@ const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
  * Actions for a rejected message: sends a rejection notice to the original requester and
  * updates the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
  * characters)
  * @param {string} text - Message that was requested
  * @param {string} user_id - Slack user ID (without <, >, or # characters)
@@ -92,7 +92,7 @@ const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejecter) => {
  * message appropriately and sends an ephemeral message to the original requester letting
  * them know that their request was cancelled.
  *
- * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
  * characters)
  * @param {string} user_id - Slack user ID (without <, >, or # characters)
  * @param {string} ts - Timestamp of the moderation message
