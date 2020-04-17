@@ -13,14 +13,15 @@ const {
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 /**
- * actions for approved message, calls to post to the original channel and updates the moderation
- * channel
- * 
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} text - message that was requested
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} adminMessageTs - timestamp of message in the moderation channel
- * @param {string} approver - user ID of moderator approving
+ * Actions for an approved message: posts the message to the channel requested and updates
+ * the mod message appropriately
+ *
+ * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} text - Message that was requested
+ * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} adminMessageTs - Timestamp of the moderation message
+ * @param {string} approver - User ID of the approving moderator
  */
 const approveMessage = (
   channel_id,
@@ -41,14 +42,15 @@ const approveMessage = (
 };
 
 /**
- * actions for approved message without at channel, calls to post to the original channel and updates the moderation
- * channel
- * 
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} text - message that was requested
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} adminMessageTs - timestamp of message in the moderation channel
- * @param {string} approver - user ID of moderator approving
+ * Actions for a message approved without @channel: posts the message to the channel
+ * requested (without an @channel) and updates the mod message appropriately
+ *
+ * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} text - Message that was requested
+ * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} adminMessageTs - Timestamp of the moderation message
+ * @param {string} approver - User ID of the approving moderator
  */
 const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
   postToChannel(channel_id, text, user_id, false);
@@ -63,13 +65,15 @@ const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
 };
 
 /**
- * actions for denied/rejected message, updates the moderation channel and sends rejection DM to requester.
- * 
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} text - message that was requested
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} adminMessageTs - timestamp of message in the moderation channel
- * @param {string} rejecter - user ID of moderator denying request
+ * Actions for a rejected message: sends a rejection notice to the original requester and
+ * updates the mod message appropriately
+ *
+ * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} text - Message that was requested
+ * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} adminMessageTs - Timestamp of the moderation message
+ * @param {string} approver - User ID of the approving moderator
  */
 const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejecter) => {
   updateModMessage(
@@ -84,11 +88,14 @@ const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejecter) => {
 };
 
 /**
- * action for message request cancelled by requester
- * 
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} ts - timestamp ID of moderation message
+ * Actions for a requested message cancelled by the requester: updates the moderation
+ * message appropriately and sends an ephemeral message to the original requester letting
+ * them know that their request was cancelled.
+ *
+ * @param {string} channel_id - Slack channel ID such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} ts - Timestamp of the moderation message
  */
 const cancelRequest = (channel_id, user_id, ts) => {
   updateModMessage("cancelled", channel_id, "", user_id, ts, "");
