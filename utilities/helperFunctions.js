@@ -21,11 +21,14 @@ const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
 
 /**
- * Query Slack to determine if user has appropriate moderating permissions
- * if not post ephemeral to user saying why they can't approve, otherwise execute appropriate action
- * 
- * @returns {next} - if user has appropriate permissions
- * @returns {postEphemeral} - if user does not have permissions
+ * Middleware to query Slack to determine if user has appropriate moderating permissions;
+ * if not, post an ephemeral message to the user explaining why they can't approve;
+ * otherwise, execute appropriate action
+ *
+ * @returns {next} - Go onto next step in middleware chain if all permission requirements
+ * are met
+ * @returns {postEphemeral} - Post an ephemeral message to the user if permission
+ * requirements are not met
  */
 const isModerator = async ({
   body: {
@@ -63,19 +66,24 @@ const isModerator = async ({
     channel: channelId,
     user: id,
     text:
-      ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests."
+      `:cry: Sorry! You're not a moderator, so you cannot approve or reject these
+      requests.`
   });
 };
 
 /**
- * updates message in moderation channel based on action chosen
- * 
- * @param {string} status - one of "cancelled", "approved", "approved without at-channel"
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} text - message to be posted
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} ts - timestamp ID of message in moderation channel
- * @param {string} moderator - user ID of moderator initiating action
+ * Updates the mod message appropriately based on which action was taken
+ *
+ * @param {string} status - One of "cancelled", "approved", or "approved without
+ * at-channel"
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} text - Message to be posted
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * requester
+ * @param {string} ts - Timestamp of the mod message
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * moderator taking action on the request
  */
 const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   if (status == "cancelled") {
@@ -122,7 +130,8 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${moderator}>.`
+          text: `that <@${user_id}> requested to post in <#${channel_id}> has been
+          *${status}* by <@${moderator}>.`
         }
       }
     ]
@@ -130,10 +139,10 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
 };
 
 /**
- * return a random emoji of based on categories. Emoji list in emojis.json 
- * 
- * @param {string} sentiment - one of "happy", "medium", "sad", or ""
- * @returns {string}  ":emoji:" - random emoji based on sentiment from emojis.json.
+ * Return a random emoji of based on sentiment. Emoji list in utilities/emojis.json
+ *
+ * @param {string} sentiment - One of "happy", "medium", "sad", or ""
+ * @returns {string}  ":emoji:" - Random emoji based on sentiment
  */
 const randomEmoji = sentiment => {
   let emojis = [];
