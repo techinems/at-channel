@@ -13,16 +13,19 @@ const {
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 //package config
-/** provides functions for posting nicely formated messages in appropriate channels */
+/** Functions for posting nicely formated messages in appropriate channels */
 
 /**
- *  prepare and post message in the moderation channel for new requests
- * 
- *  @param {string} text - message to be approved
- *  @param {string} channel_id - channel ID message will be posted to
- *  @param {string} user_id - user ID of requester
- *  @param {string} hash - identifier of request used for tracking requests. Usually MD5 of text.
- *  @returns {string} ts - timestamp ID from slack API postMessage call 
+ * Prepare and post message in the moderation channel for new requests
+ *
+ * @param {string} text - Message that was requested
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters), where the message was requested (i.e. not the moderation channel)
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * requester
+ * @param {string} hash - MD5 hash of the message text for tracking purposes; provided
+ * by slashChannel
+ * @returns {string} ts - Timestamp of the mod message (from postMessage() function)
  */
 const sendForApproval = async (text, channel_id, user_id, hash) => {
   const { ts } = await postMessage({
@@ -34,7 +37,8 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use at-channel in <#${channel_id}>. The message is:`
+          text: `:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use
+          at-channel in <#${channel_id}>. The message is:`
         }
       },
       {
@@ -91,12 +95,16 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
 };
 
 /**
- *  prepare and post approved message to the original channel (for approved with at channel and without at channel)
- * 
- *  @param {string} channel_id - channel ID message will be posted to
- *  @param {string} text - message to be approved
- *  @param {string} user_id - user ID of requester
- *  @param {boolean} atChannel - if approved with @channel or no at channel, default true
+ *  Prepare and post approved message to the requested channel, for those messages
+ * approved with or without @channel
+ *
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters), to which the message will be posted
+ * @param {string} text - Message text to post
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * requester
+ * @param {boolean} atChannel - Boolean for whether the message was approved with or
+ * without @channel (default: true)
 */
 const postToChannel = (channel_id, text, user_id, atChannel = true) => {
   const atChannelText = atChannel ? "<!channel>" : "the channel";
@@ -109,7 +117,8 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${user_id}> has sent the following message to ${atChannelText}:\n\n${text}`
+          text: `<@${user_id}> has sent the following message to
+          ${atChannelText}:\n\n${text}`
         }
       }
     ]
@@ -117,12 +126,15 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
 };
 
 /**
- *  prepare and post rejection to requesting user as slackbot DM
- *  
- *  @param {string} channel_id - channel ID message request originated
- *  @param {string} user_id - user ID of requester
- *  @param {string} text - message that was rejected
- *  @param {string} rejecter - user ID of moderator that rejected the message
+ *  Prepare and post rejection notice to requested (as a Slackbot DM)
+ *
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters), to which the message will be posted
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * requester
+ * @param {string} text - Text of rejected message
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * rejecting moderator
  */
 const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
   postMessage({
