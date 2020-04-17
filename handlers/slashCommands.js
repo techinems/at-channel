@@ -16,13 +16,17 @@ const { randomEmoji } = require("../utilities/helperFunctions");
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
 /**
- * Used to determine if a request was sent in a moderated channel, post the request to the moderation channel
- * and send information to the requester. If not in a moderated channel, post the message automatically
- * 
- * @param {string} channel_name - slack channel name such as "general" (no #)
- * @param {string} channel_id - slack channel ID such as "CFCP42RL7" (no <#, >)
- * @param {string} user_id - slack user ID (no <@, >)
- * @param {string} text - message to be posted
+ * Handles /channel commands: first determines if the request is blank. If so, it lets the
+ * requester know as much. Next, was the request sent in a moderated channel? If so, the
+ * message is sent to the moderation channel for approval, and an ephemeral message is
+ * posted to the requester to inform them of this. If the message was sent to a
+ * non-moderated channel, the message is immediately sent to said channel.
+ *
+ * @param {string} channel_name - Slack channel name, such as "general" (no # character)
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} text - Message that was requested
  */
 const slashChannel = async ({
   command: { channel_name, channel_id, user_id, text }
@@ -50,7 +54,7 @@ const slashChannel = async ({
         user_id,
         md5(text)
       );
-      // Post emphemeral to user in active channel
+      // post emphemeral to user in active channel
       postEphemeral({
         token: TOKEN,
         channel: channel_id,
@@ -58,7 +62,7 @@ const slashChannel = async ({
         text:
           randomEmoji("happy") + " Thanks for your request! It's been sent to the moderators for approval."
       });
-      // Post slackbot message to user to allow for cancelation of request
+      // post Slackbot message to user to allow for cancellation of request
       postMessage({
         token: TOKEN,
         channel: user_id,
@@ -100,6 +104,7 @@ const slashChannel = async ({
       });
       break;
     default:
+    // if not a moderated channel, simply most the message immediately
       postToChannel(channel_id, text, user_id);
   }
 };
