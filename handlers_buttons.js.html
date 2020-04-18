@@ -1,4 +1,32 @@
-//local packages
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: handlers/buttons.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: handlers/buttons.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//local packages
 const { postToChannel, sendRejectionDm } = require("./message.js");
 const { updateModMessage } = require("../utilities/helperFunctions.js");
 const {
@@ -16,10 +44,10 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
  * Actions for an approved message: posts the message to the channel requested and updates
  * the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters)
  * @param {string} text - Message that was requested
- * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters)
  * @param {string} adminMessageTs - Timestamp of the moderation message
  * @param {string} approver - User ID of the approving moderator
  */
@@ -45,10 +73,10 @@ const approveMessage = (
  * Actions for a message approved without @channel: posts the message to the channel
  * requested (without an @channel) and updates the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters)
  * @param {string} text - Message that was requested
- * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters)
  * @param {string} adminMessageTs - Timestamp of the moderation message
  * @param {string} approver - User ID of the approving moderator
  */
@@ -68,10 +96,10 @@ const approveNoAt = (channel_id, text, user_id, adminMessageTs, approver) => {
  * Actions for a rejected message: sends a rejection notice to the original requester and
  * updates the mod message appropriately
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters)
  * @param {string} text - Message that was requested
- * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters)
  * @param {string} adminMessageTs - Timestamp of the moderation message
  * @param {string} approver - User ID of the approving moderator
  */
@@ -92,9 +120,9 @@ const rejectMessage = (channel_id, text, user_id, adminMessageTs, rejecter) => {
  * message appropriately and sends an ephemeral message to the original requester letting
  * them know that their request was cancelled.
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters)
- * @param {string} user_id - Slack user ID (without <, >, or # characters)
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters)
  * @param {string} ts - Timestamp of the moderation message
  */
 const cancelRequest = (channel_id, user_id, ts) => {
@@ -108,3 +136,26 @@ const cancelRequest = (channel_id, user_id, ts) => {
 };
 
 module.exports = { approveMessage, approveNoAt, rejectMessage, cancelRequest };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#approveMessage">approveMessage</a></li><li><a href="global.html#approveNoAt">approveNoAt</a></li><li><a href="global.html#cancelRequest">cancelRequest</a></li><li><a href="global.html#isModerator">isModerator</a></li><li><a href="global.html#postToChannel">postToChannel</a></li><li><a href="global.html#randomEmoji">randomEmoji</a></li><li><a href="global.html#rejectMessage">rejectMessage</a></li><li><a href="global.html#sendForApproval">sendForApproval</a></li><li><a href="global.html#sendRejectionDm">sendRejectionDm</a></li><li><a href="global.html#slashChannel">slashChannel</a></li><li><a href="global.html#updateModMessage">updateModMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 18 2020 11:11:21 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

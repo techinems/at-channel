@@ -1,4 +1,32 @@
-//node packages
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: handlers/message.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: handlers/message.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//node packages
 
 //local packages
 const {
@@ -19,9 +47,9 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
  * Prepare and post message in the moderation channel for new requests
  *
  * @param {string} text - Message that was requested
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters), where the message was requested (i.e. not the moderation channel)
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters) of the
  * requester
  * @param {string} hash - MD5 hash of the message text for tracking purposes; provided
  * by slashChannel
@@ -37,8 +65,8 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use
-          at-channel in <#${channel_id}>. The message is:`
+          text: `:wave: Hello, kind moderators!\n\n&lt;@${user_id}> has requested to use
+          at-channel in &lt;#${channel_id}>. The message is:`
         }
       },
       {
@@ -98,26 +126,26 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
  *  Prepare and post approved message to the requested channel, for those messages
  * approved with or without @channel
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters), to which the message will be posted
  * @param {string} text - Message text to post
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters) of the
  * requester
  * @param {boolean} atChannel - Boolean for whether the message was approved with or
  * without @channel (default: true)
 */
 const postToChannel = (channel_id, text, user_id, atChannel = true) => {
-  const atChannelText = atChannel ? "<!channel>" : "the channel";
+  const atChannelText = atChannel ? "&lt;!channel>" : "the channel";
   postMessage({
     token: TOKEN,
     channel: channel_id,
-    text: `<@${user_id}> has sent a message to the channel.`,
+    text: `&lt;@${user_id}> has sent a message to the channel.`,
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `<@${user_id}> has sent the following message to
+          text: `&lt;@${user_id}> has sent the following message to
           ${atChannelText}:\n\n${text}`
         }
       }
@@ -128,19 +156,19 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
 /**
  *  Prepare and post rejection notice to requested (as a Slackbot DM)
  *
- * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without &lt;, >, or #
  * characters), to which the message will be posted
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters) of the
  * requester
  * @param {string} text - Text of rejected message
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} user_id - Slack user ID (without &lt;, >, or # characters) of the
  * rejecting moderator
  */
 const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
   postMessage({
     token: TOKEN,
     channel: user_id,
-    text: `Your at-channel request has been rejected by <@${rejecter}>`,
+    text: `Your at-channel request has been rejected by &lt;@${rejecter}>`,
     blocks: [
       {
         type: "section",
@@ -160,7 +188,7 @@ const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `has been rejected by <@${rejecter}>.`
+          text: `has been rejected by &lt;@${rejecter}>.`
         }
       }
     ]
@@ -168,3 +196,26 @@ const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
 };
 
 module.exports = { sendForApproval, postToChannel, sendRejectionDm };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#approveMessage">approveMessage</a></li><li><a href="global.html#approveNoAt">approveNoAt</a></li><li><a href="global.html#cancelRequest">cancelRequest</a></li><li><a href="global.html#isModerator">isModerator</a></li><li><a href="global.html#postToChannel">postToChannel</a></li><li><a href="global.html#randomEmoji">randomEmoji</a></li><li><a href="global.html#rejectMessage">rejectMessage</a></li><li><a href="global.html#sendForApproval">sendForApproval</a></li><li><a href="global.html#sendRejectionDm">sendRejectionDm</a></li><li><a href="global.html#slashChannel">slashChannel</a></li><li><a href="global.html#updateModMessage">updateModMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 18 2020 11:11:21 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
