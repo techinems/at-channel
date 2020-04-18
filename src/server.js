@@ -3,7 +3,7 @@ require("dotenv").config();
 
 //local packages
 const { app } = require("./utilities/bolt.js");
-const { isModerator, ackNext } = require("./utilities/helperFunctions.js");
+const { isModerator, ackNext, extractSlackId } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
 const {
   approveMessage,
@@ -29,15 +29,9 @@ app.action(
       user: { id }
     }
   }) => {
-    const channel_id = /<#(.*?)[a-zA-Z0-9]{7,10}>/
-      .exec(blocks[0].text.text)[0]
-      .replace("<#", "")
-      .replace(">", "");
+    const channel_id = extractSlackId(blocks, /<#(.*?)[a-zA-Z0-9]{7,10}>/, "<#");
     const text = blocks[1].text.text.replace("&gt;&gt;&gt;", "");
-    const user_id = /<@(.*?)[a-zA-Z0-9]{7,10}>/
-      .exec(blocks[0].text.text)[0]
-      .replace("<@", "")
-      .replace(">", "");
+    const user_id =  extractSlackId(blocks, /<@(.*?)[a-zA-Z0-9]{7,10}>/, "<@");
     if (/^APP_.*/.test(action_id)) {
       approveMessage(channel_id, text, user_id, ts, id);
     } else if (/^NOAT_.*/.test(action_id)) {
