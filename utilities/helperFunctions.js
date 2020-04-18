@@ -32,6 +32,16 @@ const ackNext = async (ack, next) => {
   next();
 };
 
+/**
+ * Middleware to query Slack to determine if user has appropriate moderating permissions;
+ * if not, post an ephemeral message to the user explaining why they can't approve;
+ * otherwise, execute appropriate action
+ *
+ * @returns { next() } Go onto next step in middleware chain if all permission requirements
+ * are met
+ * @returns { function(): object } Post an ephemeral message to the user if permission
+ * requirements are not met
+ */
 const isModerator = async ({
   body: {
     user: { id },
@@ -54,7 +64,6 @@ const isModerator = async ({
       .replace("<@", "")
       .replace(">", "");
   if (modUsers.includes(id) && id !== original_poster) return next();
-
   let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests.";
   if (id === original_poster) {
     text = ":cry: Sorry! Moderators cannot approve or reject their own requests.";
@@ -67,8 +76,22 @@ const isModerator = async ({
   });
 };
 
+/**
+ * Updates the mod message appropriately based on which action was taken
+ *
+ * @param {string} status - One of "cancelled", "approved", or "approved without
+ * at-channel"
+ * @param {string} channel_id - Slack channel ID, such as "CFCP42RL7" (without <, >, or #
+ * characters)
+ * @param {string} text - Message to be posted
+ * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * requester
+ * @param {string} ts - Timestamp of the mod message
+ * @param {string} moderator - Slack user ID (without <, >, or # characters) of the
+ * moderator taking action on the request
+ */
 const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
-  if (status === "cancelled") {
+  if (status == "cancelled") {
     update({
       token: TOKEN,
       channel: MOD_CHANNEL_ID,
@@ -79,7 +102,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     });
     return;
   }
-
+  // determine appropriate emoji for mod message based on action
   const emoji =
       status === "approved"
           ? ":heavy_check_mark:"
@@ -98,6 +121,12 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   });
 };
 
+/**
+ * Return a random emoji of based on sentiment. Emoji list in utilities/emojis.json
+ *
+ * @param {string} sentiment - One of "happy", "medium", "sad", or ""
+ * @returns {string} Random emoji based on sentiment
+ */
 const randomEmoji = sentiment => {
   let emojis = [];
   const availableSentiments = Object.keys(emojisList);

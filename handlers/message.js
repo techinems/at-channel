@@ -13,7 +13,6 @@ const { genMarkdownSection, genActionButton } = require("../utilities/helperFunc
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
-//package config
 /** Functions for posting nicely formatted messages in appropriate channels */
 
 /**
@@ -62,7 +61,7 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
  * requester
  * @param {boolean} atChannel - Boolean for whether the message was approved with or
  * without @channel (default: true)
- */
+*/
 const postToChannel = (channel_id, text, user_id, atChannel = true) => {
   const atChannelText = atChannel ? "<!channel>" : "the channel";
   postMessage({
