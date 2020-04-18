@@ -28,7 +28,7 @@ const genActionButton = (action_id, text, style = null) => {
   return btn;
 };
 
-const ackNext = async (ack, next) => { ack(); next(); }
+const ackNext = async (ack, next) => { ack(); next(); };
 /**
  * Middleware to query Slack to determine if user has appropriate moderating permissions;
  * if not, post an ephemeral message to the user explaining why they can't approve;
@@ -62,7 +62,7 @@ const isModerator = async ({
     .replace(">", "");
   if (modUsers.includes(id) && id != original_poster) return next();
   
-  let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests."
+  let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests.";
   if (id == original_poster) {
     text = ":cry: Sorry! Moderators cannot approve or reject their own requests.";
   }
@@ -74,7 +74,6 @@ const isModerator = async ({
   });
 };
 
-const updateModMessage = (status, channel_id, text, user_id, ts, mod) => {
 /**
  * Updates the mod message appropriately based on which action was taken
  *
