@@ -15,7 +15,6 @@ const emojisList = require("./emojis");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
-const USER_TOKEN = process.env.SLACK_USER_TOKEN;
 const MOD_CHANNEL_ID = process.env.MOD_CHANNEL_ID;
 const ADMIN_USERGROUP_ID = process.env.ADMIN_USERGROUP_ID;
 const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
@@ -47,23 +46,22 @@ const isModerator = async ({
   },
   next
 }) => {
-  const { users: adminUsers } = await list({
-    token: USER_TOKEN,
+  const {users: adminUsers} = await list({
+    token: TOKEN,
     usergroup: ADMIN_USERGROUP_ID
   });
   if (adminUsers.includes(id)) return next();
-  const { users: modUsers } = await list({
-    token: USER_TOKEN,
+  const {users: modUsers} = await list({
+    token: TOKEN,
     usergroup: MOD_USERGROUP_ID
   });
   const original_poster = /<@(.*?)[a-zA-Z0-9]{7,10}>/
-    .exec(blocks[0].text.text)[0]
-    .replace("<@", "")
-    .replace(">", "");
-  if (modUsers.includes(id) && id != original_poster) return next();
-  
+      .exec(blocks[0].text.text)[0]
+      .replace("<@", "")
+      .replace(">", "");
+  if (modUsers.includes(id) && id !== original_poster) return next();
   let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests.";
-  if (id == original_poster) {
+  if (id === original_poster) {
     text = ":cry: Sorry! Moderators cannot approve or reject their own requests.";
   }
   return postEphemeral({
@@ -85,7 +83,7 @@ const isModerator = async ({
  * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
  * requester
  * @param {string} ts - Timestamp of the mod message
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} moderator - Slack user ID (without <, >, or # characters) of the
  * moderator taking action on the request
  */
 const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
@@ -102,11 +100,11 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
   }
   // determine appropriate emoji for mod message based on action
   const emoji =
-    status == "approved"
-      ? ":heavy_check_mark:"
-      : status == "approved without at-channel"
-      ? ":heavy_minus_sign:"
-      : ":x:";
+      status === "approved"
+          ? ":heavy_check_mark:"
+          : status === "approved without at-channel"
+          ? ":heavy_minus_sign:"
+          : ":x:";
   update({
     token: TOKEN,
     channel: MOD_CHANNEL_ID,
@@ -114,7 +112,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
     blocks: [
       genMarkdownSection(`${emoji} The message:`),
       genMarkdownSection(`>>>${text}`),
-      genMarkdownSection(`that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${mod}>.`)
+      genMarkdownSection(`that <@${user_id}> requested to post in <#${channel_id}> has been *${status}* by <@${moderator}>.`)
     ]
   });
 };

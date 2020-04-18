@@ -13,8 +13,7 @@ const { genMarkdownSection, genActionButton } = require("../utilities/helperFunc
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
-//package config
-/** Functions for posting nicely formated messages in appropriate channels */
+/** Functions for posting nicely formatted messages in appropriate channels */
 
 /**
  * Prepare and post message in the moderation channel for new requests
@@ -83,7 +82,7 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
  * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
  * requester
  * @param {string} text - Text of rejected message
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} rejecter - Slack user ID (without <, >, or # characters) of the
  * rejecting moderator
  */
 const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
