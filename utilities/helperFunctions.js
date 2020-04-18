@@ -25,9 +25,9 @@ const MOD_USERGROUP_ID = process.env.MOD_USERGROUP_ID;
  * if not, post an ephemeral message to the user explaining why they can't approve;
  * otherwise, execute appropriate action
  *
- * @returns {next} - Go onto next step in middleware chain if all permission requirements
+ * @returns { next() } Go onto next step in middleware chain if all permission requirements
  * are met
- * @returns {postEphemeral} - Post an ephemeral message to the user if permission
+ * @returns { function(): object } Post an ephemeral message to the user if permission
  * requirements are not met
  */
 const isModerator = async ({
@@ -142,7 +142,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
  * Return a random emoji of based on sentiment. Emoji list in utilities/emojis.json
  *
  * @param {string} sentiment - One of "happy", "medium", "sad", or ""
- * @returns {string}  ":emoji:" - Random emoji based on sentiment
+ * @returns {string} Random emoji based on sentiment
  */
 const randomEmoji = sentiment => {
   let emojis = [];

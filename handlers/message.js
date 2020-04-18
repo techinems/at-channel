@@ -25,7 +25,7 @@ const TOKEN = process.env.SLACK_BOT_TOKEN;
  * requester
  * @param {string} hash - MD5 hash of the message text for tracking purposes; provided
  * by slashChannel
- * @returns {string} ts - Timestamp of the mod message (from postMessage() function)
+ * @returns {string} Timestamp of the mod message (from postMessage() function)
  */
 const sendForApproval = async (text, channel_id, user_id, hash) => {
   const { ts } = await postMessage({
