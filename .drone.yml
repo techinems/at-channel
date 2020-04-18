@@ -5,7 +5,7 @@ steps:
   - name: deploy
     image: appleboy/drone-ssh
     settings:
-      host: lp12.rpiambulance.com
+      host: lp13.rpiambulance.com
       username: drone
       password:
         from_secret: SSH_PASSWORD
@@ -19,7 +19,7 @@ steps:
   - name: deploy-dev
     image: appleboy/drone-ssh
     settings:
-      host: lp12.rpiambulance.com
+      host: lp13.rpiambulance.com
       username: drone
       password:
         from_secret: SSH_PASSWORD
