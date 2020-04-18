@@ -27,11 +27,7 @@ const genActionButton = (action_id, text, style = null) => {
   return btn;
 };
 
-const ackNext = async (ack, next) => {
-  ack();
-  next();
-};
-
+const ackNext = async ({ack, next}) => { ack(); next(); };
 /**
  * Middleware to query Slack to determine if user has appropriate moderating permissions;
  * if not, post an ephemeral message to the user explaining why they can't approve;
