@@ -34,6 +34,10 @@ Head over to Slack's [app portal](https://api.slack.com/apps) and create a new a
 
 Using what you just set up on Slack, you now need to set up the server's environment variables. At this point, you should've cloned this repo to your server and run `npm i` to get all the packages squared away. Next, copy or rename the `.env.example` file to `.env`, and open it up. Fill out the fields accordingly (you will need a bunch of the information from Slack's app portal). When that's done, running `nodemon server.js` or running the server in whatever other way you choose should work!
 
+### Developer documentation
+To regenerate jsdoc files use:
+`jsdoc -R README.md -d docs/ handlers/*.js utilities/*.js server.js`
+
 ## Credits
 
 ### Developers
