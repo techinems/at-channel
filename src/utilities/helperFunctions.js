@@ -27,7 +27,17 @@ const genActionButton = (action_id, text, style = null) => {
   return btn;
 };
 
+/**
+ * Extracts a channel ID or user ID from the first element of a Slack-provided blocks array.
+ * 
+ * @param {object[]} blocks - an array of blocks provided by the Slack API.
+ * @param {RegExp} regex - the regular expression for matching to the ID
+ * @param {string} tag  - the opening tag for the ID (should be either '<#' for channel ID or '<@' for user ID)
+ */
+const extractSlackId = (blocks, regex, tag) => regex.exec(blocks[0].text.text)[0].replace(tag, "").replace(">", "");
+
 const ackNext = async ({ack, next}) => { ack(); next(); };
+
 /**
  * Middleware to query Slack to determine if user has appropriate moderating permissions;
  * if not, post an ephemeral message to the user explaining why they can't approve;
@@ -55,10 +65,7 @@ const isModerator = async ({
     token: TOKEN,
     usergroup: MOD_USERGROUP_ID
   });
-  const original_poster = /<@(.*?)[a-zA-Z0-9]{7,10}>/
-      .exec(blocks[0].text.text)[0]
-      .replace("<@", "")
-      .replace(">", "");
+  const original_poster = extractSlackId(blocks, /<@(.*?)[a-zA-Z0-9]{7,10}>/, "<@");
   if (modUsers.includes(id) && id !== original_poster) return next();
   let text = ":cry: Sorry! You're not a moderator, so you cannot approve or reject these requests.";
   if (id === original_poster) {
@@ -92,9 +99,7 @@ const updateModMessage = (status, channel_id, text, user_id, ts, moderator) => {
       token: TOKEN,
       channel: MOD_CHANNEL_ID,
       ts: ts,
-      blocks: [
-        genMarkdownSection(`:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`)
-      ]
+      blocks: [genMarkdownSection(`:point_right: <@${user_id}>'s at-channel request *has been cancelled*.`)]
     });
     return;
   }
@@ -136,4 +141,4 @@ const randomEmoji = sentiment => {
   return emojis[Math.floor(Math.random() * emojis.length)];
 };
 
-module.exports = { isModerator, updateModMessage, randomEmoji, genMarkdownSection, genActionButton, ackNext };
+module.exports = { isModerator, updateModMessage, randomEmoji, genMarkdownSection, genActionButton, extractSlackId, ackNext };
