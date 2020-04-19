@@ -28,7 +28,7 @@ const genActionButton = (action_id, text, style = null) => {
 };
 
 /**
- * Extracts a channel ID or user ID from a Slack-provided blocks array.
+ * Extracts a channel ID or user ID from the first element of a Slack-provided blocks array.
  * 
  * @param {object[]} blocks - an array of blocks provided by the Slack API.
  * @param {RegExp} regex - the regular expression for matching to the ID
