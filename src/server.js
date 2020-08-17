@@ -3,7 +3,7 @@ require("dotenv").config();
 
 //local packages
 const { app } = require("./utilities/bolt.js");
-const { isModerator } = require("./utilities/helperFunctions.js");
+const { isModerator, ackNext, extractSlackId } = require("./utilities/helperFunctions.js");
 const { slashChannel } = require("./handlers/slashCommands.js");
 const {
   approveMessage,
@@ -12,14 +12,7 @@ const {
   cancelRequest
 } = require("./handlers/buttons.js");
 
-app.command(
-  "/channel",
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
-  slashChannel
-);
+app.command("/channel", ackNext, slashChannel);
 
 app.action(
   /** Actions for if message was approved, approved without @channel, or rejected:
@@ -27,10 +20,7 @@ app.action(
 
   //APP = approved; NOAT = approved without @channel; REJ = reject
   /^(APP|NOAT|REJ)_.*/,
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
+  ackNext,
   isModerator,
   async ({
     action: { action_id },
@@ -39,15 +29,9 @@ app.action(
       user: { id }
     }
   }) => {
-    const channel_id = /<#(.*?)[a-zA-Z0-9]{7,10}>/
-      .exec(blocks[0].text.text)[0]
-      .replace("<#", "")
-      .replace(">", "");
+    const channel_id = extractSlackId(blocks, /<#(.*?)[a-zA-Z0-9]{7,10}>/, "<#");
     const text = blocks[1].text.text.replace("&gt;&gt;&gt;", "");
-    const user_id = /<@(.*?)[a-zA-Z0-9]{7,10}>/
-      .exec(blocks[0].text.text)[0]
-      .replace("<@", "")
-      .replace(">", "");
+    const user_id =  extractSlackId(blocks, /<@(.*?)[a-zA-Z0-9]{7,10}>/, "<@");
     if (/^APP_.*/.test(action_id)) {
       approveMessage(channel_id, text, user_id, ts, id);
     } else if (/^NOAT_.*/.test(action_id)) {
@@ -61,10 +45,7 @@ app.action(
 app.action(
   /** Action for when poster cancels @channel request */
   /^CAN_.*/,
-  async ({ ack, next }) => {
-    ack();
-    next();
-  },
+  ackNext,
   async ({
     action: { action_id },
     body: {

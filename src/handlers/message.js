@@ -8,12 +8,12 @@ const {
     }
   }
 } = require("../utilities/bolt.js");
+const { genMarkdownSection, genActionButton } = require("../utilities/helperFunctions");
 
 //globals
 const TOKEN = process.env.SLACK_BOT_TOKEN;
 
-//package config
-/** Functions for posting nicely formated messages in appropriate channels */
+/** Functions for posting nicely formatted messages in appropriate channels */
 
 /**
  * Prepare and post message in the moderation channel for new requests
@@ -33,60 +33,16 @@ const sendForApproval = async (text, channel_id, user_id, hash) => {
     channel: "at-channel-requests",
     text: "There's a new at-channel request!",
     blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use
-          at-channel in <#${channel_id}>. The message is:`
-        }
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `>>>${text}`
-        }
-      },
-      {
-        type: "divider"
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: "Do you want to *approve* or *reject* this message?"
-        }
-      },
+      genMarkdownSection(`:wave: Hello, kind moderators!\n\n<@${user_id}> has requested to use at-channel in <#${channel_id}>. The message is:`),
+      genMarkdownSection(`>>>${text}`),
+      { type: "divider" },
+      genMarkdownSection("Do you want to *approve* or *reject* this message?"),
       {
         type: "actions",
         elements: [
-          {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Approve"
-            },
-            style: "primary",
-            action_id: `APP_${hash}`
-          },
-          {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Approve without @channel"
-            },
-            action_id: `NOAT_${hash}`
-          },
-          {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Reject"
-            },
-            style: "danger",
-            action_id: `REJ_${hash}`
-          }
+          genActionButton(`APP_${hash}`, "Approve", "primary"),
+          genActionButton(`NOAT_${hash}`, "Approve without @channel"),
+          genActionButton(`REJ_${hash}`, "Reject", "danger")
         ]
       }
     ]
@@ -113,14 +69,7 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
     channel: channel_id,
     text: `<@${user_id}> has sent a message to the channel.`,
     blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `<@${user_id}> has sent the following message to
-          ${atChannelText}:\n\n${text}`
-        }
-      }
+      genMarkdownSection(`<@${user_id}> has sent the following message to ${atChannelText}:\n\n${text}`)
     ]
   });
 };
@@ -133,7 +82,7 @@ const postToChannel = (channel_id, text, user_id, atChannel = true) => {
  * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
  * requester
  * @param {string} text - Text of rejected message
- * @param {string} user_id - Slack user ID (without <, >, or # characters) of the
+ * @param {string} rejecter - Slack user ID (without <, >, or # characters) of the
  * rejecting moderator
  */
 const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
@@ -142,27 +91,9 @@ const sendRejectionDm = (channel_id, user_id, text, rejecter) => {
     channel: user_id,
     text: `Your at-channel request has been rejected by <@${rejecter}>`,
     blocks: [
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: ":face_with_hand_over_mouth: Your message:"
-        }
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `>>>${text}`
-        }
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `has been rejected by <@${rejecter}>.`
-        }
-      }
+      genMarkdownSection(":face_with_hand_over_mouth: Your message:"),
+      genMarkdownSection(`>>>${text}`),
+      genMarkdownSection(`has been rejected by <@${rejecter}>.`)
     ]
   });
 };
